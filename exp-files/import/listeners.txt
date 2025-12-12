@@ -18,7 +18,19 @@ $fitnessProgessionP = ea.l.savePlotAndCsvForExp(
   path = $basePath + "best-fitness." + $imgType;
   plot = ea.plot.multi.quality(
     xSubplot = f.interpolated(name = target; s = "{problem.target}");
+    ySubplot = f.interpolated(name = ea; s = "{solver.name}");
     line = f.interpolated(name = grammar; s = "{solver.mapper.grammar.name}")
+  );
+  type = $imgType
+)
+
+$sizeProgessionP = ea.l.savePlotAndCsvForExp(
+  path = $basePath + "best-size." + $imgType;
+  plot = ea.plot.multi.xyExp(
+    xSubplot = f.interpolated(name = target; s = "{problem.target}");
+    ySubplot = f.interpolated(name = ea; s = "{solver.name}");
+    line = f.interpolated(name = grammar; s = "{solver.mapper.grammar.name}");
+    y = f.gridCount(of = ea.f.solution(of = ea.f.best()))
   );
   type = $imgType
 )
@@ -27,9 +39,16 @@ $fitnessBoxplotP = ea.l.savePlotAndCsvForExp(
   path = $basePath + "best-fitness-final." + $imgType;
   plot = ea.plot.multi.qualityBoxplot(
     xSubplot = f.interpolated(name = target; s = "{problem.target}");
+    ySubplot = f.interpolated(name = ea; s = "{solver.name}");
     box = f.interpolated(name = grammar; s = "{solver.mapper.grammar.name}")
   );
   configuration = viz.plot.conf.image(axesShow = all; axesIndependences = [all]);
   type = $imgType
 )
 
+$archiveP = ea.l.savePlotAndCsvForRun(
+  path = $basePath + "{solver.name}/{problem.target}/me-archive-{solver.mapper.grammar.name}-{randomGenerator.seed:%03d}." + $imgType;
+  plot = ea.plot.single.me();
+  kCondition = predicate.matches(f = f.mappableKey(key = "solver.name"); regex = "me");
+  type = $imgType
+)

@@ -5,13 +5,14 @@ $imgType = png
 
 ea.experiment(
   runs = (randomGenerator = (seed = $seeds) * [m.defaultRG()])
-    * (problem = [
-      ea.p.s.charShapeApproximation(target = circle);
-      ea.p.s.charShapeApproximation(target = "worm-a");
-      ea.p.s.charShapeApproximation(target = "worm-ab");
-      ea.p.s.charShapeApproximation(target = alternated);
-      ea.p.s.charShapeApproximation(target = dog)
+    * (problem = (target = [
+      circle;
+      "worm-a";
+      "worm-ab";
+      alternated;
+      dog
     ])
+    * [ea.p.s.charShapeApproximation()])
     * (solver = (stop = ea.sc.nOfQualityEvaluations(n = $nOfEvals))
     * (representation = [ea.r.bitString()])
     * (mapper = (grammar = (name = [
@@ -28,6 +29,7 @@ ea.experiment(
   listeners = [
     $consoleL;
     $fitnessProgessionP;
-    $fitnessBoxplotP
+    $fitnessBoxplotP;
+    $sizeProgessionP
   ]
 )

@@ -22,7 +22,7 @@ The binary of [JGEA](https://github.com/ericmedvet/jgea), the evolutionary frame
 
 ### Evolution of polyominoes (as synthetic problems)
 
-All five grammars on all five targets with GA:
+All five grammars on all five targets with GA (with the *bits(500)* representation):
 ```shell
 java \
   -jar jgea.jar \
@@ -32,3 +32,15 @@ java \
     '$nOfEvals = 20000' \
     '$seeds = [1:1:50]'
 ```
+
+All five grammars on two targets (*dog* and *circle*) with a few EAs (with the *reals(200)* representation):
+```shell
+java \
+  -jar jgea.jar \
+  -nt 16 -nr 4 \
+  -f exp-files/synthetic-circle+dog-eas.txt \
+  --expHeadLines \
+    '$nOfEvals = 20000' \
+    '$seeds = [1:1:50]'
+```
+

@@ -1,0 +1,47 @@
+$basePath = ''./exp-results/{^^.name}/{^^.startTime}/''
+$imgType = png
+
+@import("import/listeners.txt")
+
+ea.experiment(
+  runs = (randomGenerator = (seed = $seeds) * [m.defaultRG()])
+    * (problem = (target = [
+      circle;
+      dog
+    ])
+    * [ea.p.s.charShapeApproximation()])
+    * (solver = (stop = ea.sc.nOfQualityEvaluations(n = $nOfEvals))
+    * (mapper = (grammar = (name = [
+      monodirectional;
+      worm;
+      "dog-shape"
+    ])
+    * [ea.grammar.gridBundled()])
+    * [ea.m.dsToGrammarGrid(l = 200)])
+    * [
+      ea.s.ga(
+        representation = ea.r.doubleString(factory = ea.r.f.dsUniform(initialMinV = 0; initialMaxV = 1))
+      );
+      ea.s.mapElites(
+        representation = ea.r.doubleString(factory = ea.r.f.dsUniform(initialMinV = 0; initialMaxV = 1));
+        descriptors = [
+          ea.s.me.d.descriptor(f = f.gridCompactness(of = ea.f.solution()); min = 0.5; max = 1.0; nOfBins = 10);
+          ea.s.me.d.descriptor(f = f.gridElongation(of = ea.f.solution()); min = 0.0; max = 1.0; nOfBins = 10)
+        ]
+      );
+      ea.s.pso(
+        factory = ea.r.f.dsUniform(initialMinV = 0; initialMaxV = 1)
+      );
+      ea.s.simpleEs(
+        factory = ea.r.f.dsUniform(initialMinV = 0; initialMaxV = 1)
+      )      
+    ])
+    * [ea.run()];
+  listeners = [
+    $consoleL;
+    $fitnessProgessionP;
+    $fitnessBoxplotP;
+    $sizeProgessionP;
+    $archiveP
+  ]
+)
