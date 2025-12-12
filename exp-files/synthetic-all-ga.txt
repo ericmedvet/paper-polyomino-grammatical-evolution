@@ -1,0 +1,33 @@
+$basePath = ''./exp-results/{^^.name}/{^^.startTime}/''
+$imgType = png
+
+@import("import/listeners.txt")
+
+ea.experiment(
+  runs = (randomGenerator = (seed = $seeds) * [m.defaultRG()])
+    * (problem = [
+      ea.p.s.charShapeApproximation(target = circle);
+      ea.p.s.charShapeApproximation(target = "worm-a");
+      ea.p.s.charShapeApproximation(target = "worm-ab");
+      ea.p.s.charShapeApproximation(target = alternated);
+      ea.p.s.charShapeApproximation(target = dog)
+    ])
+    * (solver = (stop = ea.sc.nOfQualityEvaluations(n = $nOfEvals))
+    * (representation = [ea.r.bitString()])
+    * (mapper = (grammar = (name = [
+      monodirectional;
+      bidirectional;
+      worm;
+      alternated;
+      "dog-shape"
+    ])
+    * [ea.grammar.gridBundled()])
+    * [ea.m.bsToGrammarGrid(l = 500)])
+    * [ea.s.ga()])
+    * [ea.run()];
+  listeners = [
+    $consoleL;
+    $fitnessProgessionP;
+    $fitnessBoxplotP
+  ]
+)

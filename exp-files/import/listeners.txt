@@ -1,0 +1,35 @@
+$consoleL = ea.l.console(
+  eFunctions = [
+    ea.f.size(of = ea.f.genotype(of = ea.f.best()); format = "%3d");
+    ea.f.quality(of = ea.f.best(); format = "%6.2f");
+    ea.f.hist(of = f.each(of = ea.f.all(); mapF = ea.f.quality()));
+    f.gridCount(of = ea.f.solution(of = ea.f.best()));
+    f.gridW(of = ea.f.solution(of = ea.f.best()));
+    f.gridH(of = ea.f.solution(of = ea.f.best()))
+  ];
+  kFunctions = [
+    f.mappableKey(key = "problem.target");
+    f.mappableKey(key = "solver.mapper.grammar.name")
+  ];
+  onlyLast = true
+)
+
+$fitnessProgessionP = ea.l.savePlotAndCsvForExp(
+  path = $basePath + "best-fitness." + $imgType;
+  plot = ea.plot.multi.quality(
+    xSubplot = f.interpolated(name = target; s = "{problem.target}");
+    line = f.interpolated(name = grammar; s = "{solver.mapper.grammar.name}")
+  );
+  type = $imgType
+)
+
+$fitnessBoxplotP = ea.l.savePlotAndCsvForExp(
+  path = $basePath + "best-fitness-final." + $imgType;
+  plot = ea.plot.multi.qualityBoxplot(
+    xSubplot = f.interpolated(name = target; s = "{problem.target}");
+    box = f.interpolated(name = grammar; s = "{solver.mapper.grammar.name}")
+  );
+  configuration = viz.plot.conf.image(axesShow = all; axesIndependences = [all]);
+  type = $imgType
+)
+

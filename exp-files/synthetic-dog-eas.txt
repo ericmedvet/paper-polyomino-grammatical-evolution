@@ -1,0 +1,57 @@
+$basePath = ''./exp-results/{^^.name}/{^^.startTime}/''
+$imgType = png
+
+ea.experiment(
+  runs = (randomGenerator = (seed = $seeds) * [m.defaultRG()]) *
+    (problem = [
+      ea.p.s.charShapeApproximation(target = circle);
+      ea.p.s.charShapeApproximation(target = "worm-a");
+      ea.p.s.charShapeApproximation(target = "worm-ab");
+      ea.p.s.charShapeApproximation(target = alternated);
+      ea.p.s.charShapeApproximation(target = dog)
+    ]) *
+    (solver = (stop = ea.sc.nOfQualityEvaluations(n = $nOfEvals)) *
+    (representation = [ea.r.bitString()]) * [
+      ea.s.ga(mapper = ea.m.bsToGrammarGrid(grammar = ea.grammar.gridBundled(name = monodirectional)));
+      ea.s.ga(mapper = ea.m.bsToGrammarGrid(grammar = ea.grammar.gridBundled(name = bidirectional)));
+      ea.s.ga(mapper = ea.m.bsToGrammarGrid(grammar = ea.grammar.gridBundled(name = worm)));
+      ea.s.ga(mapper = ea.m.bsToGrammarGrid(grammar = ea.grammar.gridBundled(name = alternated)));
+      ea.s.ga(mapper = ea.m.bsToGrammarGrid(grammar = ea.grammar.gridBundled(name = "dog-shape")))
+    ]) * [
+    ea.run()
+  ];
+  listeners = [
+    ea.l.console(
+      eFunctions = [
+        ea.f.size(of = ea.f.genotype(of = ea.f.best()); format = "%3d");
+        ea.f.quality(of = ea.f.best(); format = "%6.2f");
+        ea.f.hist(of = f.each(of = ea.f.all(); mapF = ea.f.quality()));
+        f.gridCount(of = ea.f.solution(of = ea.f.best()));
+        f.gridW(of = ea.f.solution(of = ea.f.best()));
+        f.gridH(of = ea.f.solution(of = ea.f.best()))
+      ];
+      kFunctions = [
+        f.mappableKey(key = "problem.target");
+        f.mappableKey(key = "solver.mapper.grammar.name")
+      ];
+      onlyLast = true
+    );
+    ea.l.savePlotAndCsvForExp(
+      path = $basePath + "best-fitness." + $imgType;
+      plot = ea.plot.multi.quality(
+        xSubplot = f.interpolated(name = target; s = "{problem.target}");
+        line = f.interpolated(name = grammar; s = "{solver.mapper.grammar.name}")
+      );
+      type = $imgType
+    );
+    ea.l.savePlotAndCsvForExp(
+      path = $basePath + "best-fitness-final." + $imgType;
+      plot = ea.plot.multi.qualityBoxplot(
+        xSubplot = f.interpolated(name = target; s = "{problem.target}");
+        box = f.interpolated(name = grammar; s = "{solver.mapper.grammar.name}")
+      );
+      configuration = viz.plot.conf.image(axesShow = all; axesIndependences = [all]);
+      type = $imgType
+    )
+  ]
+)

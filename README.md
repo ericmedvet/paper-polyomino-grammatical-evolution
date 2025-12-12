@@ -13,7 +13,22 @@ The paper related to these experiments is this one:
 }
 ```
 
-## Requirements
+## How to reproduce the experiments
+
+### Requirements
 - JDK 25
 
 The binary of [JGEA](https://github.com/ericmedvet/jgea), the evolutionary framework these experiments are based on, is already available in this repo.
+
+### Evolution of polyominoes (as synthetic problems)
+
+All five grammars on all five targets with GA:
+```shell
+java \
+  -jar jgea.jar \
+  -nt 16 -nr 4 \
+  -f exp-files/synthetic-all-ga.txt \
+  --expHeadLines \
+    '$nOfEvals = 20000' \
+    '$seeds = [1:1:50]'
+```
