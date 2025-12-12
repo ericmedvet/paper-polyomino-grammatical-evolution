@@ -1,9 +1,9 @@
 # paper-polyomino-grammatical-evolution
-Software artifacts related for the experiments on the evolution of polyominoes guided by a 2-D grammar.
+Software artifacts for the experiments on the evolution of polyominoes guided by a 2-D grammar.
 
 ## Paper
-The paper related to these experiments is [this one](https://doi.org/10.21203/rs.3.rs-6982435/v1):
-- Jessica Mégane, Eric Medvet, Nuno Lourenço et al. Exploring Grammar-Guided Design and Evolution of Polyominoes with Modular Soft Robots, 09 October 2025, PREPRINT (Version 1) available at Research Square
+The paper related to these experiments is this one:
+- Jessica Mégane, Eric Medvet, Nuno Lourenço et al. [Exploring Grammar-Guided Design and Evolution of Polyominoes with Modular Soft Robots](https://doi.org/10.21203/rs.3.rs-6982435/v1), 09 October 2025, PREPRINT (Version 1) available at Research Square
 
 ```bibtex
 @article{megane2025exploring,
