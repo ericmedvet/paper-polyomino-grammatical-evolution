@@ -33,7 +33,7 @@ java \
     '$seeds = [1:1:50]'
 ```
 
-All five grammars on two targets (*dog* and *circle*) with a few EAs (with the *reals(200)* representation):
+Three grammars on two targets (*dog* and *circle*) with four EAs (with the *reals(200)* representation):
 ```shell
 java \
   -jar jgea.jar \
@@ -42,5 +42,18 @@ java \
   --expHeadLines \
     '$nOfEvals = 20000' \
     '$seeds = [1:1:50]'
+```
+
+### Evolution of VSRs
+
+Two VSR grammars (biped and worm) for the locomotion problem with NSGA-II (with the *bits(1024)* representation):
+```shell
+java \
+  -jar jgea-vsrs.jar \
+  -nt 16 -nr 4 \
+  -f exp-files/vsr.txt \
+  --expHeadLines \
+    '$nOfEvals = 20000' \
+    '$seeds = [1:1:10]'
 ```
 

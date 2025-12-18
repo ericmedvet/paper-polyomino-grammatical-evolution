@@ -1,0 +1,164 @@
+$basePath = ''./exp-results/{^^.name}/{^^.startTime}/''
+$imgType = png
+
+$duration = 30
+
+$v100 = f.percentile(p = 100; of = ea.f.all(); by = f.mapValue(key = "first.agent.velocity.x"; of = ea.f.quality()))
+$v075 = f.percentile(p = 75; of = ea.f.all(); by = f.mapValue(key = "first.agent.velocity.x"; of = ea.f.quality()))
+$p050 = f.percentile(p = 50; of = ea.f.all(); by = f.mapValue(key = "first.agent.avg.power"; of = ea.f.quality()))
+$p025 = f.percentile(p = 25; of = ea.f.all(); by = f.mapValue(key = "first.agent.avg.power"; of = ea.f.quality()))
+
+$gridMapper = er.m.isToReactiveGridVsr(
+  w = 6;
+  h = 4;
+  availableVoxels = [
+    m.supplier(of = s.a.vsr.rv.ph());
+    m.supplier(of = s.a.vsr.rv.ps());
+    m.supplier(of = s.a.vsr.rv.avsin());
+    m.supplier(of = s.a.vsr.rv.ahsin());
+    m.supplier(of = s.a.vsr.rv.asin());
+    m.supplier(of = s.a.vsr.rv.asin(phase = 3.14))
+  ]
+)
+$grammarMapper = er.m.sGridToReactiveGridVsr(
+  of = ea.m.bsToGrammarGrid(
+    l = 1024;
+    grammar = ea.grammar.gridFile(path = "biped-vh123-improved.bnf")
+  );
+  availableVoxels = ea.misc.sMapFromLists(
+    keys = [h; s; avsin; ahsin; asin; acos];
+    values = [
+      m.supplier(of = s.a.vsr.rv.ph());
+      m.supplier(of = s.a.vsr.rv.ps());
+      m.supplier(of = s.a.vsr.rv.avsin());
+      m.supplier(of = s.a.vsr.rv.ahsin());
+      m.supplier(of = s.a.vsr.rv.asin());
+      m.supplier(of = s.a.vsr.rv.asin(phase = 3.14))
+    ]
+  )
+)
+
+ea.experiment(
+  runs = (randomGenerator = (seed = $seeds) * [m.defaultRG()]) *
+    (problem = [
+    	  ea.p.simToSmo(
+        simulation = s.task.locomotion();
+        tRange = m.range(min = 0; max = $duration);
+        dT = 0.016666;
+        toMaxObjectives = [s.f.outcome.faXVelocity()];
+        toMinObjectives = [s.f.outcome.faAvgPower()]
+      )
+    ]) *
+    (solver = (stop = ea.sc.nOfQualityEvaluations(n = $nOfEvals)) * (nPop = [100]) * [
+      ea.s.nsga2(
+        name = "nsga2-grid";
+        representation = ea.r.intString();
+        mapper = $gridMapper
+      );
+      ea.s.nsga2(
+        name = "nsga2-grammar-biped";
+        representation = ea.r.bitString();
+        mapper = $grammarMapper
+      )
+    ]) *
+    [ea.run()];
+  listeners = [
+    ea.l.console(
+      eFunctions = [
+        ea.f.size(of = ea.f.genotype(of = ea.f.best()); format = "%4d");
+        ea.f.hist(of = f.each(of = ea.f.all(); mapF = f.mapValue(key = "first.agent.velocity.x"; of = ea.f.quality())));
+        f.mapValue(key = "first.agent.velocity.x"; of = ea.f.quality(of = $v100); format = "%5.3f");
+        f.mapValue(key = "first.agent.avg.power"; of = ea.f.quality(of = $v100); format = "%5.3f");
+        f.gridFitW(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $v100))));
+        f.gridFitH(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $v100))))
+      ];
+      logExceptions = true
+    );
+    ea.l.csv(
+      path = $basePath + "iterations.txt";
+      eFunctions = [
+        ea.f.size(of = ea.f.genotype(of = ea.f.best()); format = "%3d");
+        f.mapValue(key = "first.agent.velocity.x"; of = ea.f.quality(of = $v100));
+        f.mapValue(key = "first.agent.avg.power"; of = ea.f.quality(of = $v100));
+        f.gridFitW(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $v100))));
+        f.gridFitH(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $v100))));
+        f.gridCount(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $v100))));
+        f.gridCompactness(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $v100))));
+        f.gridElongation(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $v100))));
+        f.mapValue(key = "first.agent.velocity.x"; of = ea.f.quality(of = $v075));
+        f.mapValue(key = "first.agent.avg.power"; of = ea.f.quality(of = $v075));
+        f.gridFitW(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $v075))));
+        f.gridFitH(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $v075))));
+        f.gridCount(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $v075))));
+        f.gridCompactness(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $v075))));
+        f.gridElongation(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $v075))));
+        f.mapValue(key = "first.agent.velocity.x"; of = ea.f.quality(of = $p050));
+        f.mapValue(key = "first.agent.avg.power"; of = ea.f.quality(of = $p050));
+        f.gridFitW(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $p050))));
+        f.gridFitH(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $p050))));
+        f.gridCount(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $p050))));
+        f.gridCompactness(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $p050))));
+        f.gridElongation(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $p050))));
+        f.mapValue(key = "first.agent.velocity.x"; of = ea.f.quality(of = $p025));
+        f.mapValue(key = "first.agent.avg.power"; of = ea.f.quality(of = $p025));
+        f.gridFitW(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $p025))));
+        f.gridFitH(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $p025))));
+        f.gridCount(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $p025))));
+        f.gridCompactness(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $p025))));
+        f.gridElongation(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $p025))))
+      ]
+    );
+    ea.l.csv(
+      path = $basePath + "lasts.txt";
+      eFunctions = [
+        s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $v100)));
+        s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $v075)));
+        s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $p050)));
+        s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $p025)));
+        ea.f.genotype(of = $v100);
+        ea.f.genotype(of = $v075);
+        ea.f.genotype(of = $p050);
+        ea.f.genotype(of = $p025)
+      ];
+      onlyLast = true
+    );
+    ea.l.allCsv(
+      path = $basePath + "all-lasts.txt";
+      individualFunctions = [
+      	f.mapValue(key = "first.agent.velocity.x"; of = ea.f.quality());
+      	f.mapValue(key = "first.agent.avg.power"; of = ea.f.quality());
+        s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution()));
+        ea.f.genotype()
+      ];
+      onlyLast = true
+    );
+    ea.l.savePlotAndCsvForRun(
+      plot = ea.plot.multi.xyExp(y = f.mapValue(key = "first.agent.velocity.x"; of = ea.f.quality(of = $v100)));
+      overwrite = true;
+      path = $basePath + "v100-v" + $imgType
+    );
+    ea.l.savePlotAndCsvForRun(
+      plot = ea.plot.multi.xyExp(y = f.mapValue(key = "first.agent.avg.power"; of = ea.f.quality(of = $v100)));
+      overwrite = true;
+      path = $basePath + "v100-p" + $imgType
+    );
+    ea.l.savePlotAndCsvForRun(
+      plot = ea.plot.single.biObjectivePopulation(
+        x = f.mapValue(key = "first.agent.velocity.x"; of = ea.f.quality());
+        y = f.mapValue(key = "first.agent.avg.power"; of = ea.f.quality())
+      );
+      secondary = true;
+      path = $basePath + "objectives-{solver.name}-{randomGenerator.seed:%03d}" + $imgType
+    );
+    ea.l.saveForRun(
+      path = $basePath + "v100-video-{solver.name}-{randomGenerator.seed:%04d}.mp4";
+      of = acc.last();
+      processor = s.f.taskVideo(
+        of = ea.f.solution(of = $v100);
+        task = s.task.locomotion();
+        endTime = $duration
+      )
+    )
+  ]
+)
+
