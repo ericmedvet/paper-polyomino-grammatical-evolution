@@ -37,6 +37,7 @@ $grammarMapper = er.m.sGridToReactiveGridVsr(
     ]
   )
 )
+$isGridToBodyMapper =
 
 ea.experiment(
   runs = (randomGenerator = (seed = $seeds) * [m.defaultRG()]) *
@@ -70,7 +71,16 @@ ea.experiment(
         f.mapValue(key = "first.agent.velocity.x"; of = ea.f.quality(of = $v100); format = "%5.3f");
         f.mapValue(key = "first.agent.avg.power"; of = ea.f.quality(of = $v100); format = "%5.3f");
         f.gridFitW(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $v100))));
-        f.gridFitH(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $v100))))
+        f.gridFitH(of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $v100))));
+        f.format(
+          of = s.f.vsrBody(of = ea.f.supplied(of = ea.f.solution(of = $v100)));
+          format = "{%d;%d}{%s}";
+          functions = [
+            f.gridFitW();
+            f.gridFitH();
+            f.eGridString(representations = [])
+          ]
+        )
       ];
       logExceptions = true
     );
