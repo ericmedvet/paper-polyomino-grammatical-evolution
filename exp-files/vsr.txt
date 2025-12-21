@@ -9,6 +9,7 @@ $p050 = f.percentile(p = 50; of = ea.f.all(); by = f.mapValue(key = "first.agent
 $p025 = f.percentile(p = 25; of = ea.f.all(); by = f.mapValue(key = "first.agent.avg.power"; of = ea.f.quality()))
 
 $gridMapper = ea.m.gridToGrid(
+  name = grid;
   onlyLargestConnected = true;
   of = ea.m.isToSGrid(
     maxW = 6;
@@ -16,11 +17,20 @@ $gridMapper = ea.m.gridToGrid(
     items = [h; s; avsin; ahsin; asin; acos]
   )
 )
-$grammarMapper = ea.m.gridToGrid(
+$grammarBipedMapper = ea.m.gridToGrid(
+  name = "grammar-biped";
   onlyLargestConnected = true;
   of = ea.m.bsToGrammarGrid(
     l = 1024;
-    grammar = ea.grammar.gridFile(path = "biped-vh123-improved.bnf")
+    grammar = ea.grammar.gridFile(path = "exp-files/grammar/biped.bnf")
+  )
+)
+$grammarWormMapper = ea.m.gridToGrid(
+  name = "grammar-worm";
+  onlyLargestConnected = true;
+  of = ea.m.bsToGrammarGrid(
+    l = 1024;
+    grammar = ea.grammar.gridFile(path = "exp-files/grammar/worm.bnf")
   )
 )
 $vsrMapper = er.m.sGridToReactiveGridVsr(
@@ -32,7 +42,7 @@ $vsrMapper = er.m.sGridToReactiveGridVsr(
       m.supplier(of = s.a.vsr.rv.avsin());
       m.supplier(of = s.a.vsr.rv.ahsin());
       m.supplier(of = s.a.vsr.rv.asin());
-      m.supplier(of = s.a.vsr.rv.asin(phase = 3.14))
+      m.supplier(of = s.a.vsr.rv.asin(phase = 1.57))
     ]
   )
 )
@@ -69,14 +79,19 @@ ea.experiment(
     ]) *
     (solver = (stop = ea.sc.nOfQualityEvaluations(n = $nOfEvals)) * (nPop = [100]) * [
       ea.s.nsga2(
-        name = "nsga2-grid";
+        name = ''{mapper.name}'';
         representation = ea.r.intString();
         mapper = $gridMapper
       );
       ea.s.nsga2(
-        name = "nsga2-grammar-biped";
+        name = ''{mapper.name}'';
         representation = ea.r.bitString();
-        mapper = $grammarMapper
+        mapper = $grammarBipedMapper
+      );
+      ea.s.nsga2(
+        name = ''{mapper.name}'';
+        representation = ea.r.bitString();
+        mapper = $grammarWormMapper
       )
     ]) *
     [ea.run()];
@@ -147,12 +162,12 @@ ea.experiment(
     ea.l.savePlotAndCsvForRun(
       plot = ea.plot.multi.xyExp(y = f.mapValue(key = "first.agent.velocity.x"; of = ea.f.quality(of = $v100)));
       overwrite = true;
-      path = $basePath + "v100-v" + $imgType
+      path = $basePath + "v100-v." + $imgType
     );
     ea.l.savePlotAndCsvForRun(
       plot = ea.plot.multi.xyExp(y = f.mapValue(key = "first.agent.avg.power"; of = ea.f.quality(of = $v100)));
       overwrite = true;
-      path = $basePath + "v100-p" + $imgType
+      path = $basePath + "v100-p." + $imgType
     );
     ea.l.savePlotAndCsvForRun(
       plot = ea.plot.single.biObjectivePopulation(
@@ -160,10 +175,10 @@ ea.experiment(
         y = f.mapValue(key = "first.agent.avg.power"; of = ea.f.quality())
       );
       secondary = true;
-      path = $basePath + "objectives-{solver.name}-{randomGenerator.seed:%03d}" + $imgType
+      path = $basePath + "objectives-{solver.name}-{randomGenerator.seed:%03d}." + $imgType
     );
     ea.l.saveForRun(
-      path = $basePath + "v100-video-{solver.name}-{randomGenerator.seed:%04d}.mp4";
+      path = $basePath + "video/v100-{solver.name}-{randomGenerator.seed:%04d}.mp4";
       of = acc.last();
       processor = s.f.taskVideo(
         of = ea.f.fromMapper(
