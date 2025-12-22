@@ -57,3 +57,60 @@ java \
     '$seeds = [1:1:10]'
 ```
 
+## Overview of the results
+
+### Evolution of VSRs
+
+#### Evolution of the velocity and power for the fastest robot
+
+![Velocity of the fastest robot during the evolution](results/vsr.txt/v100-v.png)
+
+![Power of the fastest robot during the evolution](results/vsr.txt/v100-p.png)
+
+#### Sample videos of the final fastest robot
+
+Videos from runs 1 to 5 (more in `results/vsr.txt/`).
+
+##### With grid (no-grammar) representation
+
+<video src="results/vsr.txt/video/v100-grammar-biped-0001.mp4" width=300/>
+
+#### Objective plots
+
+Plots from runs 1 to 5 (more in `results/vsr.txt/`).
+
+##### With grid (no-grammar) representation
+
+![Objectives plot at five stages of the evolution](results/vsr.txt/objectives-grid-001.png)
+
+![Objectives plot at five stages of the evolution](results/vsr.txt/objectives-grid-002.png)
+
+![Objectives plot at five stages of the evolution](results/vsr.txt/objectives-grid-003.png)
+
+![Objectives plot at five stages of the evolution](results/vsr.txt/objectives-grid-004.png)
+
+![Objectives plot at five stages of the evolution](results/vsr.txt/objectives-grid-005.png)
+
+##### With biped-grammar representation
+
+![Objectives plot at five stages of the evolution](results/vsr.txt/objectives-grammar-biped-001.png)
+
+![Objectives plot at five stages of the evolution](results/vsr.txt/objectives-grammar-biped-002.png)
+
+![Objectives plot at five stages of the evolution](results/vsr.txt/objectives-grammar-biped-003.png)
+
+![Objectives plot at five stages of the evolution](results/vsr.txt/objectives-grammar-biped-004.png)
+
+![Objectives plot at five stages of the evolution](results/vsr.txt/objectives-grammar-biped-005.png)
+
+##### With worm-grammar representation
+
+![Objectives plot at five stages of the evolution](results/vsr.txt/objectives-grammar-worm-001.png)
+
+![Objectives plot at five stages of the evolution](results/vsr.txt/objectives-grammar-worm-002.png)
+
+![Objectives plot at five stages of the evolution](results/vsr.txt/objectives-grammar-worm-003.png)
+
+![Objectives plot at five stages of the evolution](results/vsr.txt/objectives-grammar-worm-004.png)
+
+![Objectives plot at five stages of the evolution](results/vsr.txt/objectives-grammar-worm-005.png)
