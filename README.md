@@ -69,11 +69,25 @@ java \
 
 #### Sample videos of the final fastest robot
 
-Videos from runs 1 to 5 (more in `results/vsr.txt/`).
+Videos from runs 1 to 3 (more in `results/vsr.txt/`).
 
 ##### With grid (no-grammar) representation
 
-<video src="results/vsr.txt/video/v100-grammar-biped-0001.mp4" width=300/>
+![Video of fastest evolved robot](results/vsr.txt/video/v100-grid-0001.gif)
+![Video of fastest evolved robot](results/vsr.txt/video/v100-grid-0002.gif)
+![Video of fastest evolved robot](results/vsr.txt/video/v100-grid-0003.gif)
+
+##### With biped-grammar representation
+
+![Video of fastest evolved robot](results/vsr.txt/video/v100-grammar-biped-0001.gif)
+![Video of fastest evolved robot](results/vsr.txt/video/v100-grammar-biped-0002.gif)
+![Video of fastest evolved robot](results/vsr.txt/video/v100-grammar-biped-0003.gif)
+
+##### With worm-grammar representation
+
+![Video of fastest evolved robot](results/vsr.txt/video/v100-grammar-worm-0001.gif)
+![Video of fastest evolved robot](results/vsr.txt/video/v100-grammar-worm-0002.gif)
+![Video of fastest evolved robot](results/vsr.txt/video/v100-grammar-worm-0003.gif)
 
 #### Objective plots
 
