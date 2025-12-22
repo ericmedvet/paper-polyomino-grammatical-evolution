@@ -69,25 +69,43 @@ java \
 
 #### Sample videos of the final fastest robot
 
-Videos from runs 1 to 3 (more in `results/vsr.txt/`).
+Videos from runs 1 to 8 (more in `results/vsr.txt/`).
 
 ##### With grid (no-grammar) representation
 
 ![Video of fastest evolved robot](results/vsr.txt/video/v100-grid-0001.gif)
 ![Video of fastest evolved robot](results/vsr.txt/video/v100-grid-0002.gif)
 ![Video of fastest evolved robot](results/vsr.txt/video/v100-grid-0003.gif)
+![Video of fastest evolved robot](results/vsr.txt/video/v100-grid-0004.gif)
+
+![Video of fastest evolved robot](results/vsr.txt/video/v100-grid-0005.gif)
+![Video of fastest evolved robot](results/vsr.txt/video/v100-grid-0006.gif)
+![Video of fastest evolved robot](results/vsr.txt/video/v100-grid-0007.gif)
+![Video of fastest evolved robot](results/vsr.txt/video/v100-grid-0008.gif)
 
 ##### With biped-grammar representation
 
 ![Video of fastest evolved robot](results/vsr.txt/video/v100-grammar-biped-0001.gif)
 ![Video of fastest evolved robot](results/vsr.txt/video/v100-grammar-biped-0002.gif)
 ![Video of fastest evolved robot](results/vsr.txt/video/v100-grammar-biped-0003.gif)
+![Video of fastest evolved robot](results/vsr.txt/video/v100-grammar-biped-0004.gif)
+
+![Video of fastest evolved robot](results/vsr.txt/video/v100-grammar-biped-0005.gif)
+![Video of fastest evolved robot](results/vsr.txt/video/v100-grammar-biped-0006.gif)
+![Video of fastest evolved robot](results/vsr.txt/video/v100-grammar-biped-0007.gif)
+![Video of fastest evolved robot](results/vsr.txt/video/v100-grammar-biped-0008.gif)
 
 ##### With worm-grammar representation
 
 ![Video of fastest evolved robot](results/vsr.txt/video/v100-grammar-worm-0001.gif)
 ![Video of fastest evolved robot](results/vsr.txt/video/v100-grammar-worm-0002.gif)
 ![Video of fastest evolved robot](results/vsr.txt/video/v100-grammar-worm-0003.gif)
+![Video of fastest evolved robot](results/vsr.txt/video/v100-grammar-worm-0004.gif)
+
+![Video of fastest evolved robot](results/vsr.txt/video/v100-grammar-worm-0005.gif)
+![Video of fastest evolved robot](results/vsr.txt/video/v100-grammar-worm-0006.gif)
+![Video of fastest evolved robot](results/vsr.txt/video/v100-grammar-worm-0007.gif)
+![Video of fastest evolved robot](results/vsr.txt/video/v100-grammar-worm-0008.gif)
 
 #### Objective plots
 
@@ -128,3 +146,14 @@ Plots from runs 1 to 5 (more in `results/vsr.txt/`).
 ![Objectives plot at five stages of the evolution](results/vsr.txt/objectives-grammar-worm-004.png)
 
 ![Objectives plot at five stages of the evolution](results/vsr.txt/objectives-grammar-worm-005.png)
+
+## How to transform mp4 videos to gif
+
+Within the video directory:
+```bash
+for i in {0001..0008}; do
+    ffmpeg -i "v100-grammar-biped-$i.mp4" -vf "scale=150:-1:flags=lanczos" "v100-grammar-biped-$i.gif" -y
+    ffmpeg -i "v100-grammar-worm-$i.mp4" -vf "scale=150:-1:flags=lanczos" "v100-grammar-worm-$i.gif" -y
+    ffmpeg -i "v100-grid-$i.mp4" -vf "scale=150:-1:flags=lanczos" "v100-grid-$i.gif" -y
+done
+```
