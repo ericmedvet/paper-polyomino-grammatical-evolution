@@ -72,12 +72,8 @@ $finalArchiveContent = ea.l.allCsv(
   individualFunctions = [
   	  f.gridCompactness(of = ea.f.solution());
   	  f.gridElongation(of = ea.f.solution());
-  	  ea.f.descBin(
-  	    descriptor = ea.s.me.d.descriptor(f = f.gridCompactness(of = ea.f.solution()); min = 0.5; max = 1.0; nOfBins = 10)
-  	  );
-  	  ea.f.descBin(
-  	    descriptor = ea.s.me.d.descriptor(f = f.gridElongation(of = ea.f.solution()); min = 0.5; max = 1.0; nOfBins = 10)
-  	  );
+  	  ea.function.meBin(of = f.nTh(n = 0; of = ea.f.meCoordinates()));
+  	  ea.function.meBin(of = f.nTh(n = 1; of = ea.f.meCoordinates()));
   	  f.composition(of = ea.f.solution(); then = $stringF)
   ];
   runFunctions = [
