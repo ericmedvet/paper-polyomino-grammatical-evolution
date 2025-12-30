@@ -42,6 +42,7 @@ ea.experiment(
     $fitnessProgessionP;
     $fitnessBoxplotP;
     $sizeProgessionP;
-    $archiveP
+    $archiveP;
+    $finalArchiveContent
   ]
 )

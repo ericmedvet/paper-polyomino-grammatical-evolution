@@ -1,3 +1,17 @@
+$stringF = f.format(
+  of = f.fittedGrid();
+  format = "{%d;%d}{%s}";  
+  functions = [
+    f.gridFitW();
+    f.gridFitH();
+    f.gridString(
+      elementF = f.toString();
+      byRows = true;
+      yMirror = true
+    )
+  ]
+)
+
 $consoleL = ea.l.console(
   eFunctions = [
     ea.f.size(of = ea.f.genotype(of = ea.f.best()); format = "%3d");
@@ -51,4 +65,25 @@ $archiveP = ea.l.savePlotAndCsvForRun(
   plot = ea.plot.single.me();
   kCondition = predicate.matches(f = f.mappableKey(key = "solver.name"); regex = "me");
   type = $imgType
+)
+
+$finalArchiveContent = ea.l.allCsv(
+  path = $basePath + "me-lasts.txt";
+  individualFunctions = [
+  	  f.gridCompactness(of = ea.f.solution());
+  	  f.gridElongation(of = ea.f.solution());
+  	  ea.f.descBin(
+  	    descriptor = ea.s.me.d.descriptor(f = f.gridCompactness(of = ea.f.solution()); min = 0.5; max = 1.0; nOfBins = 10)
+  	  );
+  	  ea.f.descBin(
+  	    descriptor = ea.s.me.d.descriptor(f = f.gridElongation(of = ea.f.solution()); min = 0.5; max = 1.0; nOfBins = 10)
+  	  );
+  	  f.composition(of = ea.f.solution(); then = $stringF)
+  ];
+  runFunctions = [
+    f.mappableKey(key = "problem.target");
+    f.mappableKey(key = "solver.mapper.grammar.name")
+  ];
+  runCondition = predicate.matches(f = f.mappableKey(key = "solver.name"); regex = "me");
+  onlyLast = true
 )
